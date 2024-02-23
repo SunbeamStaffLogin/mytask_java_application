@@ -2,8 +2,8 @@ package com.app.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -14,8 +14,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name="users")
-public class User extends BaseEntity{
+@Table(name = "users")
+public class User extends BaseEntity {
 	@Column
 	private String username;
 	@Column
@@ -26,9 +26,10 @@ public class User extends BaseEntity{
 	private String password;
 	@Column
 	private String mobile;
-	
-	@ManyToOne
-	@JoinColumn(name = "role_id", nullable = false)
+
+	@Enumerated(EnumType.STRING)
 	private Role role;
+
+	
 
 }
