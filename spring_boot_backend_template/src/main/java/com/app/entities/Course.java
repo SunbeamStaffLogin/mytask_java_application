@@ -1,7 +1,5 @@
 package com.app.entities;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,5 +17,7 @@ public class Course extends BaseEntity {
 	@Column
 	private String courseName;
 	@Column
-	private LocalDate duration;
+	private int duration;
+	
+	
 }
