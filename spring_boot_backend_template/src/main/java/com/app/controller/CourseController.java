@@ -56,13 +56,13 @@ public class CourseController {
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
     
-    @GetMapping("/all")
+    @GetMapping("/allSubject")
     public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
         List<SubjectDTO> subjects = subjectService.getAllSubjects();
         return new ResponseEntity<>(subjects, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/subject/{id}")
     public ResponseEntity<SubjectDTO> getSubjectById(@PathVariable Long id) {
         SubjectDTO subject = subjectService.getSubjectById(id);
         if (subject != null) {
