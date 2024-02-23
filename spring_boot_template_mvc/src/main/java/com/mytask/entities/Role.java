@@ -26,11 +26,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long r_id;
-
     private String r_name;
-    private boolean faculty;
-    private boolean c_coordinator;
-    private boolean student;
 
     @OneToMany(mappedBy = "role")
     private List<Users> users;
