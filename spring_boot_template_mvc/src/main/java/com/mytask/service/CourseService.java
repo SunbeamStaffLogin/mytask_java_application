@@ -1,8 +1,11 @@
 package com.mytask.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mytask.entities.Course;
 import com.mytask.repo.CourseRepo;
 
 @Service
@@ -12,5 +15,7 @@ public class CourseService {
     @Autowired
     private CourseRepo courseRepository;
 
-    // Define methods to interact with the CourseRepository as needed
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
+    }
 }

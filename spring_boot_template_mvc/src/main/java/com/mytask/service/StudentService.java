@@ -1,10 +1,15 @@
 package com.mytask.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mytask.entities.Student;
+import com.mytask.entities.Users;
 import com.mytask.repo.CourseRepo;
 import com.mytask.repo.StudentRepo;
+import com.mytask.repo.UserRepo;
 
 @Service
 public class StudentService {
@@ -13,5 +18,8 @@ public class StudentService {
     @Autowired
     private StudentRepo studentRepo;
 
-    // Define methods to interact with the StudentRepository as needed
+    public List<String> getAllGroups(){
+    	System.out.println("StudentService getAllGroups()");
+    	return studentRepo.findDistinctGrups();
+    }
 }

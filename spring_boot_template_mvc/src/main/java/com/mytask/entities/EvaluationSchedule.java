@@ -32,6 +32,7 @@ public class EvaluationSchedule {
 	@JoinColumn(name = "subject_id")
 	private Subject subject;
 	private String evaluationType;
+	private LocalDate fromDate;
 	private LocalDate validTill;
 	
 	private String grup;

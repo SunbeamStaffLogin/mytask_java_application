@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,11 +27,10 @@ import lombok.ToString;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long r_id;
-    private String r_name;
-
+    private Long roleId;
+    private String rName;
+    @JsonBackReference
     @OneToMany(mappedBy = "role")
     private List<Users> users;
 
-    // Constructors, getters, and setters
 }

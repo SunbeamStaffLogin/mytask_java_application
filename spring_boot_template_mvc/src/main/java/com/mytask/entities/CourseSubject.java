@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +31,12 @@ public class CourseSubject {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cs_id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "course_id")
+	@JsonManagedReference
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "courseId",referencedColumnName = "courseId")
 	private Course course;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "subject_id")
 	private Subject subject;
 }

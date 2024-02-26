@@ -23,7 +23,7 @@ public class Course {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long c_id;
+	private Long courseId;
 	
 	private String c_name;
     private String c_duration;
