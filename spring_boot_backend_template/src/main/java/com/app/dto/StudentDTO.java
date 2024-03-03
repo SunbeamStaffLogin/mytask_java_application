@@ -1,5 +1,8 @@
 package com.app.dto;
 
+import com.app.entities.Course;
+import com.app.entities.User;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class StudentDTO {
 	private Long id;
-	private Long userId;
-	private Long courseId;
+	private User user;
+	private Course course;
 	private String group;
 }

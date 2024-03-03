@@ -42,10 +42,15 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserRespDTO signInUser(AuthRequest request) {
-		 User user = userRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword())
-	                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+		User user = userRepo.findByUsernameAndPassword(request.getUsername(), request.getPassword())
+				.orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-		 return mapper.map(user, UserRespDTO.class);
+		return mapper.map(user, UserRespDTO.class);
 	}
 
+	@Override
+	public UserRespDTO getUserById(Long id) {
+		User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+		return mapper.map(user, UserRespDTO.class);
+	}
 }

@@ -8,5 +8,8 @@ import com.app.dto.UserRespDTO;
 
 public interface UserService {
 	UserRespDTO addUesrDetails(AddUserDTO user);
+
 	UserRespDTO signInUser(@Valid AuthRequest request);
+
+	UserRespDTO getUserById(Long id);
 }

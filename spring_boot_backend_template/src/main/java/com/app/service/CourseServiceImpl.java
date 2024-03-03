@@ -12,6 +12,7 @@ import com.app.dao.CourseRepository;
 import com.app.dto.AddCourseDTO;
 import com.app.dto.CourseDTO;
 import com.app.dto.EditCourseDTO;
+import com.app.dto.EvaluationScheduleDTO;
 import com.app.entities.Course;
 
 @Service
@@ -20,6 +21,8 @@ public class CourseServiceImpl implements CourseService {
 	@Autowired
 	private CourseRepository courseRepository;
 
+	@Autowired
+	private EvaluationScheduleService evaluationScheduleService;
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -55,5 +58,17 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseDTO> getAllCourses() {
 		List<Course> courses = courseRepository.findAll();
 		return courses.stream().map(course -> modelMapper.map(course, CourseDTO.class)).collect(Collectors.toList());
+	}
+
+	@Override
+	public CourseDTO getCourseById(Long id) {
+		Course course = courseRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Course not found with id: " + id));
+		return modelMapper.map(course, CourseDTO.class);
+	}
+
+	@Override
+	public List<EvaluationScheduleDTO> getMarksEntrySummary(Long courseId, Long subjectId) {
+		return evaluationScheduleService.getMarksEntrySummary(subjectId);
 	}
 }
