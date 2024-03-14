@@ -16,10 +16,10 @@ import lombok.ToString;
 @Entity
 @Table(name = "student_obtain_marks")
 public class StudentMarks extends BaseEntity {
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "student_id", referencedColumnName = "id")
 	private Student student; // Foreign key reference to User
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "subject_id", referencedColumnName = "id")
 	private Subject subject; // Foreign key reference to Subject
 	private int theoryMarks;

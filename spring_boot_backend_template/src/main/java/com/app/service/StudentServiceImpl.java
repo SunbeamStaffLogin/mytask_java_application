@@ -77,4 +77,11 @@ public class StudentServiceImpl implements StudentService {
 		// Delete the student
 		studentRepository.delete(existingStudent);
 	}
+	
+	 @Override
+	    public Student findByUserId(Long userId) {
+	        User user = new User();
+	        user.setId(userId);
+	        return studentRepository.findByUser(user);
+	    }
 }
