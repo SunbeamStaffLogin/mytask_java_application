@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.app.dto.AddStudentDTO;
 import com.app.dto.StudentDTO;
+import com.app.entities.Student;
 
 public interface StudentService {
 	List<StudentDTO> getAllStudents();
@@ -15,4 +16,6 @@ public interface StudentService {
 	void updateStudent(Long studentId, StudentDTO studentDTO);
 
 	void deleteStudent(Long studentId);
+
+	Student findByUserId(Long userId);
 }

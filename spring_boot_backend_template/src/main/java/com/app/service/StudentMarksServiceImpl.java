@@ -36,22 +36,33 @@ public class StudentMarksServiceImpl implements StudentMarksService {
 	public StudentMarksDTO getStudentObtainMarksById(Long id) {
 		StudentMarks studentMarks = studentObtainMarksRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("StudentObtainMarks not found with id: " + id));
+		studentMarks.setSubject(null);
 		return modelMapper.map(studentMarks, StudentMarksDTO.class);
 	}
 
 	@Override
 	public List<StudentMarksDTO> getStudentMarksByStudentId(Long studentId) {
-		List<StudentMarks> studentMarksEntities = studentObtainMarksRepository.findByStudentId(studentId);
-		List<StudentMarksDTO> studentMarksDTOs = new ArrayList<>();
+	    List<StudentMarks> studentMarksEntities = studentObtainMarksRepository.findByStudentId(studentId);
+	    List<StudentMarksDTO> studentMarksDTOs = new ArrayList<>();
 
-		for (StudentMarks studentMarksEntity : studentMarksEntities) {
-			StudentMarksDTO studentMarksDTO = modelMapper.map(studentMarksEntity, StudentMarksDTO.class);
-			studentMarksDTOs.add(studentMarksDTO);
-		}
+	    for (StudentMarks studentMarksEntity : studentMarksEntities) {
+	        StudentMarksDTO studentMarksDTO = new StudentMarksDTO();
+	        
+	        // Fetch the subject name from the associated Subject entity
+	        String subjectName = studentMarksEntity.getSubject().getSubjectName();
+	        studentMarksDTO.setSubjectName(subjectName);
+	        
+	        // Set other fields
+	        studentMarksDTO.setTheoryMarks(studentMarksEntity.getTheoryMarks());
+	        studentMarksDTO.setLabMarks(studentMarksEntity.getLabMarks());
+	        studentMarksDTO.setIa1Marks(studentMarksEntity.getIa1Marks());
+	        studentMarksDTO.setIa2Marks(studentMarksEntity.getIa2Marks());
+	        
+	        studentMarksDTOs.add(studentMarksDTO);
+	    }
 
-		return studentMarksDTOs;
+	    return studentMarksDTOs;
 	}
-
 	@Override
 	public StudentMarksDTO saveStudentObtainMarks(AddStudentMarksDTO studentMarksDTO) {
 		StudentMarks studObtainedMarks = modelMapper.map(studentMarksDTO, StudentMarks.class);
