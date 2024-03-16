@@ -20,6 +20,7 @@ public class EvaluationSchemeController {
 
     @PostMapping("/evaluation-schedule")
     public EvaluationSchedule insertEvaluationSchedule(@RequestBody EvaluationSchedule evaluationSchedule) {
+    	System.out.println("In insertEvaluationSchedule evaluationSchedule= "+evaluationSchedule);
         return evaluationSchemeService.saveEvaluationSchedule(evaluationSchedule);
     }
 }

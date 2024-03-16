@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,14 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+    
+//    @Value("${server.port}")
+//    private String serverPort;
+    
+    @RequestMapping("/codeDecode")
+    public void codeDecode() {
+//    	System.out.println("my server port is "+serverPort);
+    }
 
     @GetMapping("/by-role")
     public List<Users> getUsersByRoleId(@RequestParam("roleId") Long roleId) {
