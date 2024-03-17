@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,8 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.dao.EvaluationScheduleRepository;
 import com.app.dao.SubjectRepository;
+import com.app.dao.UserRepository;
+import com.app.dto.AddEvaluationScheduleDTO;
 import com.app.dto.EvaluationScheduleDTO;
 import com.app.entities.EvaluationSchedule;
+import com.app.entities.Subject;
+import com.app.entities.User;
 
 @Service
 @Transactional
@@ -25,14 +30,35 @@ public class EvaluationScheduleServiceImpl implements EvaluationScheduleService 
 	private SubjectRepository subjectRepository;
 
 	@Autowired
+	private UserRepository userRepository;
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@Override
-	public EvaluationScheduleDTO saveEvaluationSchedule(EvaluationScheduleDTO evaluationSchedule) {
-		EvaluationSchedule evalSchedule = modelMapper.map(evaluationSchedule, EvaluationSchedule.class);
-		EvaluationSchedule persistESchedule = evaluationScheduleRepository.save(evalSchedule);
+	public EvaluationScheduleDTO saveEvaluationSchedule(AddEvaluationScheduleDTO evaluationScheduleDTO) {
+		// Map DTO to entity
+		EvaluationSchedule evaluationSchedule = modelMapper.map(evaluationScheduleDTO, EvaluationSchedule.class);
 
-		return modelMapper.map(persistESchedule, EvaluationScheduleDTO.class);
+		// Fetch or create Subject entity based on subjectId in DTO
+		Long subjectId = evaluationScheduleDTO.getSubjectId();
+		Subject subject = subjectRepository.findById(subjectId)
+				.orElseThrow(() -> new RuntimeException("Subject not found"));
+
+		// Fetch or create User entity based on assignedUserId in DTO
+		Long assignedUserId = evaluationScheduleDTO.getAssignedUserId();
+
+		User user = userRepository.findById(assignedUserId).orElseThrow(() -> new RuntimeException("User not found"));
+
+		// Set the User entity in the EvaluationSchedule entity
+		evaluationSchedule.setAssignedUser(user);
+
+		// Set the Subject entity in the EvaluationSchedule entity
+		evaluationSchedule.setSubject(subject);
+		// Save the EvaluationSchedule entity
+		EvaluationSchedule persistedSchedule = evaluationScheduleRepository.save(evaluationSchedule);
+
+		// Map the persisted entity back to DTO and return
+		return modelMapper.map(persistedSchedule, EvaluationScheduleDTO.class);
 	}
 
 	@Override
@@ -57,27 +83,10 @@ public class EvaluationScheduleServiceImpl implements EvaluationScheduleService 
 	}
 
 	@Override
-	public List<EvaluationScheduleDTO> getMarksEntrySummary(Long subjectId) {
-		List<EvaluationSchedule> schedules = evaluationScheduleRepository.findBySubjectId(subjectId);
-		// Convert entities to DTOs
-		return schedules.stream().map(this::mapToDTO).collect(Collectors.toList());
-	}
-
-	private EvaluationScheduleDTO mapToDTO(EvaluationSchedule schedule) {
-		EvaluationScheduleDTO dto = new EvaluationScheduleDTO();
-		dto.setSubjectId(schedule.getSubject().getId()); // Assuming subjectId is retrieved from Subject entity
-		dto.setEvaluationType(schedule.getEvaluationType());
-		dto.setValidTill(schedule.getValidTill());
-		dto.setGroupvalue(schedule.getGroupvalue());
-		dto.setAssignedUserId(schedule.getAssignedUserId());
-		return dto;
-	}
-
-	@Override
 	public void approveMarksEntryForGroup(Long subjectId, String groupId) {
 		// Retrieve evaluation schedules for the specified subject and group
-	    List<EvaluationSchedule> schedules = evaluationScheduleRepository.findBySubjectIdAndGroupvalue(subjectId, groupId);
-	
+		List<EvaluationSchedule> schedules = evaluationScheduleRepository.findBySubjectIdAndGroupvalue(subjectId,
+				groupId);
 
 		// Implement your logic to approve marks entry for the group
 		for (EvaluationSchedule schedule : schedules) {
@@ -90,4 +99,44 @@ public class EvaluationScheduleServiceImpl implements EvaluationScheduleService 
 		evaluationScheduleRepository.saveAll(schedules);
 	}
 
+	@Override
+	public List<EvaluationScheduleDTO> getMarksEntrySummary(Long subjectId) {
+		// Fetch evaluation schedules from repository based on subjectId
+		List<EvaluationSchedule> evaluationSchedules = evaluationScheduleRepository.findBySubjectId(subjectId);
+
+		// Map the entities to DTOs
+		List<EvaluationScheduleDTO> evaluationScheduleDTOs = evaluationSchedules.stream()
+				.map(evaluationSchedule -> modelMapper.map(evaluationSchedule, EvaluationScheduleDTO.class))
+				.collect(Collectors.toList());
+
+		return evaluationScheduleDTOs;
+	}
+
+	@Override
+	public List<EvaluationScheduleDTO> getEvaluationSchedulesByUserId(Long userId) {
+		// Convert entities to DTOs if needed
+		List<EvaluationSchedule> evaluationSchedules = evaluationScheduleRepository.findByAssignedUserId(userId);
+
+		// List to hold DTOs
+		List<EvaluationScheduleDTO> evaluationScheduleDTOs = new ArrayList<>();
+
+		// Convert entities to DTOs
+		for (EvaluationSchedule evaluationSchedule : evaluationSchedules) {
+			EvaluationScheduleDTO evaluationScheduleDTO = new EvaluationScheduleDTO();
+
+			// Set DTO properties
+			evaluationScheduleDTO.setId(evaluationSchedule.getId());
+			evaluationScheduleDTO.setSubject(evaluationSchedule.getSubject());
+			evaluationScheduleDTO.setEvaluationType(evaluationSchedule.getEvaluationType());
+			evaluationScheduleDTO.setValidTill(evaluationSchedule.getValidTill());
+			evaluationScheduleDTO.setGroupvalue(evaluationSchedule.getGroupvalue());
+			evaluationScheduleDTO.setAssignedUser(evaluationSchedule.getAssignedUser());
+
+			// Add DTO to the list
+			evaluationScheduleDTOs.add(evaluationScheduleDTO);
+		}
+
+		// Return list of EvaluationScheduleDTOs
+		return evaluationScheduleDTOs;
+	}
 }

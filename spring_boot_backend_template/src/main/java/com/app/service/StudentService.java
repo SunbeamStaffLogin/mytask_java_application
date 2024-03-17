@@ -2,8 +2,10 @@ package com.app.service;
 
 import java.util.List;
 
+
 import com.app.dto.AddStudentDTO;
 import com.app.dto.StudentDTO;
+import com.app.dto.StudentMarksDTO;
 import com.app.entities.Student;
 
 public interface StudentService {
@@ -18,4 +20,8 @@ public interface StudentService {
 	void deleteStudent(Long studentId);
 
 	Student findByUserId(Long userId);
+
+	List<StudentDTO> getAllGroups();
+
+	List<StudentMarksDTO> getAllStudentsMarks();
 }

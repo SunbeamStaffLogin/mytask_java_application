@@ -1,6 +1,6 @@
 package com.app.service;
 
-import javax.validation.Valid;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import com.app.dao.UserRepository;
 import com.app.dto.AddUserDTO;
 import com.app.dto.AuthRequest;
 import com.app.dto.UserRespDTO;
+import com.app.entities.Role;
 import com.app.entities.User;
 
 @Service
@@ -52,5 +53,10 @@ public class UserServiceImpl implements UserService {
 	public UserRespDTO getUserById(Long id) {
 		User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 		return mapper.map(user, UserRespDTO.class);
+	}
+
+	@Override
+	public List<User> getUsersByRole(Role role) {
+		return userRepo.findByRole(role);
 	}
 }

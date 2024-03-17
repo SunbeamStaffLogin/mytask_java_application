@@ -11,9 +11,8 @@ import lombok.Setter;
 @Setter
 public class StudentMarksDTO {
 	private Long id;
-	@JsonIgnore
 	private Student student; // Foreign key reference to User
-	private String subjectName;	
+	private Subject subject;	
 	private int theoryMarks;
 	private int labMarks;
 	private int ia1Marks;

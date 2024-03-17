@@ -11,6 +11,7 @@ public interface EvaluationScheduleRepository extends JpaRepository<EvaluationSc
 	List<EvaluationSchedule> findBySubjectId(Long subjectId);
 
     List<EvaluationSchedule> findBySubjectIdAndGroupvalue(Long subjectId, String groupId);
+    List<EvaluationSchedule> findByAssignedUserId(Long userId);
 
 
 }

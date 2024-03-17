@@ -3,6 +3,8 @@ package com.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.app.dao.StudentMarksRepository;
 import com.app.dao.StudentRepository;
 import com.app.dao.SubjectRepository;
 import com.app.dto.AddStudentMarksDTO;
+import com.app.dto.EditStudentMarksDTO;
 import com.app.dto.StudentMarksDTO;
 import com.app.entities.Student;
 import com.app.entities.StudentMarks;
@@ -36,7 +39,7 @@ public class StudentMarksServiceImpl implements StudentMarksService {
 	public StudentMarksDTO getStudentObtainMarksById(Long id) {
 		StudentMarks studentMarks = studentObtainMarksRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("StudentObtainMarks not found with id: " + id));
-		studentMarks.setSubject(null);
+//		studentMarks.setSubject(null);
 		return modelMapper.map(studentMarks, StudentMarksDTO.class);
 	}
 
@@ -49,8 +52,7 @@ public class StudentMarksServiceImpl implements StudentMarksService {
 	        StudentMarksDTO studentMarksDTO = new StudentMarksDTO();
 	        
 	        // Fetch the subject name from the associated Subject entity
-	        String subjectName = studentMarksEntity.getSubject().getSubjectName();
-	        studentMarksDTO.setSubjectName(subjectName);
+	        studentMarksDTO.setSubject(studentMarksEntity.getSubject());
 	        
 	        // Set other fields
 	        studentMarksDTO.setTheoryMarks(studentMarksEntity.getTheoryMarks());
@@ -78,5 +80,26 @@ public class StudentMarksServiceImpl implements StudentMarksService {
 		StudentMarks savestudObtainedMarks = studentObtainMarksRepository.save(studObtainedMarks);
 
 		return modelMapper.map(savestudObtainedMarks,StudentMarksDTO.class);
+	}
+
+	@Override
+	public StudentMarksDTO editStudentMarks(Long id, EditStudentMarksDTO studentMarksDTO) {
+	    // Retrieve the student marks entity from the database
+	    StudentMarks studentMarks = studentObtainMarksRepository.findById(id)
+	            .orElseThrow(() -> new EntityNotFoundException("Student marks not found with id: " + id));
+
+	    // Update the student marks entity with data from the DTO
+	    if (studentMarksDTO.getSubjectId() != null) {
+	        Subject subject = subjectRepository.findById(studentMarksDTO.getSubjectId())
+	                .orElseThrow(() -> new EntityNotFoundException("Subject not found with id: " + studentMarksDTO.getSubjectId()));
+	        studentMarks.setSubject(subject);
+	    }
+	    studentMarks.setTheoryMarks(studentMarksDTO.getTheoryMarks());
+	    studentMarks.setLabMarks(studentMarksDTO.getLabMarks());
+	    studentMarks.setIa1Marks(studentMarksDTO.getIa1Marks());
+	    studentMarks.setIa2Marks(studentMarksDTO.getIa2Marks());
+
+	    // Save the updated student marks entity back to the database
+	    return modelMapper.map(studentObtainMarksRepository.save(studentMarks), StudentMarksDTO.class);
 	}
 }

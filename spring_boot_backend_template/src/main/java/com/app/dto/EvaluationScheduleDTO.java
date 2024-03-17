@@ -1,6 +1,10 @@
 package com.app.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+import com.app.entities.Subject;
+import com.app.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +12,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EvaluationScheduleDTO {
-    private Long subjectId; // Foreign key reference to Subject
+	private Long id;
+	//@JsonIgnore
+    private Subject subject; // Foreign key reference to Subject
 	private String evaluationType; // e.g., "Theory", "Lab", "IA1", "IA2"
-	private LocalDateTime validTill;
+	private LocalDate validTill;
 	private String groupvalue;
-	private Long assignedUserId;
+    private User assignedUser; // Change assignedUserId to assignedUser of type User
+
 
 }

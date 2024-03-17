@@ -2,11 +2,13 @@ package com.app.service;
 
 import java.util.List;
 
+import com.app.dto.CourseSubjectDTO;
 import com.app.dto.EvaluationScheduleDTO;
-import com.app.entities.CourseSubject;
+import com.app.dto.SubjectDTO;
+import com.app.entities.Subject;
 
 public interface CourseSubjectService {
-	List<CourseSubject> getAllSubjectsForCourse(Long courseId);
+	  public List<Subject> getAllSubjectsForCourse(Long courseId);
 
     void allocateMarksEntryTask(EvaluationScheduleDTO evaluationScheduleDTO);
 	

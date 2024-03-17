@@ -1,6 +1,6 @@
 package com.app.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -21,11 +21,20 @@ public class EvaluationSchedule extends BaseEntity {
 	@JoinColumn(name = "subject_id", nullable = false)
 	private Subject subject; // Foreign key reference to Subject
 	private String evaluationType; // e.g., "Theory", "Lab", "IA1", "IA2"
-	private LocalDateTime validTill;
+	private LocalDate validTill;
 	private String groupvalue;
-	private Long assignedUserId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private User assignedUser;
+
+	// Setter method to set validTill with only the date part
 	public void setApproved(boolean b) {
-		
+
+	}
+
+	// Setter method to set validTill with only the date part
+	public void setValidTill(LocalDate date) {
+		this.validTill = date; // Set time to midnight
 	}
 
 }

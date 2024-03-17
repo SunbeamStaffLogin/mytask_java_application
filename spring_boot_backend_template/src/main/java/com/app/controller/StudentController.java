@@ -1,6 +1,7 @@
 package com.app.controller;
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +74,10 @@ public class StudentController {
         return ResponseEntity.ok(studentMarks);
     }
 
+    @GetMapping("/getAllGroups")
+    public ResponseEntity<List<StudentDTO>> getAllGroups() {
+        List<StudentDTO> groups = studentService.getAllGroups();
+        return new ResponseEntity<>(groups, HttpStatus.OK);
+    }
     
 }
